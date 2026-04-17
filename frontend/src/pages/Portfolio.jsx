@@ -33,7 +33,7 @@ export default function Portfolio() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/projects');
+        const res = await axios.get('https://da-portfolio-backend.onrender.com/api/projects');
         setProjects(res.data);
         const cats = new Set(res.data.map(p => p.category).filter(Boolean));
         setCategories(['All', ...Array.from(cats)]);
@@ -143,7 +143,7 @@ function ProjectCard({ project, onClick }) {
       className="group cursor-pointer rounded-3xl overflow-hidden bg-dark-bg border border-dark-border transition-all duration-300 ease-in-out hover:-translate-y-2 hover:scale-[1.03] hover:shadow-[0_15px_40px_-10px_rgba(255,219,112,0.2)] relative h-64"
     >
       {project.image ? (
-        <img src={`http://localhost:5000${project.image}`} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+        <img src={`https://da-portfolio-backend.onrender.com${project.image}`} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
       ) : (
         <div className="absolute inset-0 w-full h-full flex items-center justify-center text-dark-mutedtext transition-transform duration-500 group-hover:scale-105">
           No Image
@@ -191,7 +191,7 @@ function ProjectModal({ project, onClose }) {
           if (project.isFeatured && project.images && project.images.length > 0) {
             imageUrl = project.images[0];
           } else if (project.image) {
-            imageUrl = `http://localhost:5000${project.image}`;
+            imageUrl = `https://da-portfolio-backend.onrender.com${project.image}`;
           }
 
           if (imageUrl) {

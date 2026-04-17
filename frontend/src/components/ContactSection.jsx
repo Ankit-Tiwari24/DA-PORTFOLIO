@@ -19,7 +19,7 @@ export default function ContactSection() {
         data.append('file', formData.file);
       }
 
-      await axios.post('http://localhost:5000/api/contact', data, {
+      await axios.post('https://da-portfolio-backend.onrender.com/api/contact', data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus('success');
@@ -29,7 +29,7 @@ export default function ContactSection() {
     } catch (error) {
       console.error(error);
       setStatus('error');
-      toast.error(error.response?.data?.message || 'Unable to send message. Please try again.');
+      toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
     }
   };
 
@@ -123,7 +123,7 @@ export default function ContactSection() {
           </button>
           
           {status === 'success' && <p className="text-green-500 text-center text-sm font-medium text-center">Thank you for contacting me!</p>}
-          {status === 'error' && <p className="text-red-500 text-center text-sm font-medium text-center">Unable to send message. Please try again.</p>}
+          {status === 'error' && <p className="text-red-500 text-center text-sm font-medium text-center">Failed to send message. Please try again.</p>}
         </form>
       </div>
     </section>

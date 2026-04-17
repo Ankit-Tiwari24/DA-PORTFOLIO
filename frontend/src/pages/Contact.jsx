@@ -26,7 +26,7 @@ export default function Contact() {
         data.append('file', formData.file);
       }
 
-      await axios.post('http://localhost:5000/api/contact', data, {
+      await axios.post('https://da-portfolio-backend.onrender.com/api/contact', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -40,7 +40,7 @@ export default function Contact() {
     } catch (error) {
       console.error(error);
       setStatus('error');
-      toast.error(error.response?.data?.message || 'Unable to send message. Please try again.');
+      toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
       setTimeout(() => setStatus(''), 5000);
     }
   };
@@ -212,7 +212,7 @@ export default function Contact() {
                   <div className="pt-2 flex flex-col gap-4">
                     {status === 'error' && (
                       <motion.p initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="text-red-400 text-sm font-semibold bg-red-500/10 border border-red-500/20 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Unable to send message. Please try again.
+                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Failed to send message. Please try again.
                       </motion.p>
                     )}
                     {status === 'empty' && (

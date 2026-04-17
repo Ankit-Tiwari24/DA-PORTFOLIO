@@ -27,9 +27,11 @@ router.post('/', (req, res, next) => {
     upload.single('file')(req, res, (err) => {
         if (err) {
             if (err instanceof multer.MulterError) {
-                return res.status(400).json({ message: 'File too large (Max 5MB).' });
+                console.error("Multer error during upload:", err);
+                return res.status(400).json({ success: false, message: 'File too large (Max 5MB).' });
             }
-            return res.status(400).json({ message: err.message });
+            console.error("Unknown error during upload:", err);
+            return res.status(400).json({ success: false, message: err.message });
         }
         next();
     });
@@ -37,23 +39,24 @@ router.post('/', (req, res, next) => {
     try {
         const { name, email, message } = req.body;
         if (!name || !email || !message) {
-            return res.status(400).json({ message: 'All fields are required.' });
+            return res.status(400).json({ success: false, message: 'All fields are required.' });
         }
         
         // Spam protection: check message length
         if (message.length < 10) {
-            return res.status(400).json({ message: 'Message is too short to be valid.' });
+            return res.status(400).json({ success: false, message: 'Message is too short to be valid.' });
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: 'Invalid email format.' });
+            return res.status(400).json({ success: false, message: 'Invalid email format.' });
         }
         
         const newMessage = new Message({ name, email, message });
         await newMessage.save();
 
         if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            return res.status(500).json({ message: 'Server email configuration is missing.' });
+            console.error("CRITICAL ERROR: Environment variables EMAIL_USER and EMAIL_PASS are missing!");
+            return res.status(500).json({ success: false, message: 'Server email configuration is missing.' });
         }
 
         const transporter = nodemailer.createTransport({
@@ -83,15 +86,15 @@ router.post('/', (req, res, next) => {
 
         try {
             await transporter.sendMail(mailOptions);
-            res.status(201).json({ message: 'Message sent successfully!' });
+            res.status(201).json({ success: true, message: 'Message sent successfully!' });
         } catch (mailError) {
-            console.error("Failed to send email via nodemailer:", mailError);
-            return res.status(500).json({ message: 'Unable to send message. Please try again later.' });
+            console.error("Nodemailer failed to dispatch message:", mailError.message, mailError.stack);
+            return res.status(500).json({ success: false, message: 'Unable to send message. Please try again later.' });
         }
         
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Critical server failure handling contact routing:", error.message, error.stack);
+        res.status(500).json({ success: false, message: 'Server error' });
     }
 });
 
