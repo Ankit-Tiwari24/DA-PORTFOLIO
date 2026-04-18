@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 import { Send, Paperclip, X, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -26,7 +27,7 @@ export default function Contact() {
         data.append('file', formData.file);
       }
 
-      await axios.post('https://da-portfolio-backend.onrender.com/api/contact', data, {
+      await axios.post(`${API_URL}/api/contact`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

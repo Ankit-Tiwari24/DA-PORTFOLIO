@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 import { Upload, Trash2, Mail, Edit } from 'lucide-react';
 
 export default function Admin() {
@@ -29,8 +30,8 @@ export default function Admin() {
     try {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const [msgRes, projRes] = await Promise.all([
-        axios.get('https://da-portfolio-backend.onrender.com/api/messages', config),
-        axios.get('https://da-portfolio-backend.onrender.com/api/projects')
+        axios.get(`${API_URL}/api/messages`, config),
+        axios.get(`${API_URL}/api/projects`)
       ]);
       setMessages(msgRes.data);
       setProjects(projRes.data);
@@ -42,7 +43,7 @@ export default function Admin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://da-portfolio-backend.onrender.com/api/auth/login', { username, password });
+      const res = await axios.post(`${API_URL}/api/auth/login`, { username, password });
       setToken(res.data.token);
       localStorage.setItem('adminToken', res.data.token);
     } catch (err) {
@@ -69,7 +70,7 @@ export default function Admin() {
 
     try {
       if (editId) {
-        await axios.put(`https://da-portfolio-backend.onrender.com/api/projects/${editId}`, formData, {
+        await axios.put(`${API_URL}/api/projects/${editId}`, formData, {
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data' 
@@ -77,7 +78,7 @@ export default function Admin() {
         });
         alert('Project updated!');
       } else {
-        await axios.post('https://da-portfolio-backend.onrender.com/api/projects', formData, {
+        await axios.post(`${API_URL}/api/projects`, formData, {
           headers: { 
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data' 
@@ -108,7 +109,7 @@ export default function Admin() {
   const handleDeleteProject = async (id) => {
     if (!window.confirm('Are you sure?')) return;
     try {
-      await axios.delete(`https://da-portfolio-backend.onrender.com/api/projects/${id}`, {
+      await axios.delete(`${API_URL}/api/projects/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchAdminData();

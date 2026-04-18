@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 import { ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 
@@ -11,7 +12,7 @@ export default function ProjectsSection() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('https://da-portfolio-backend.onrender.com/api/projects');
+        const res = await axios.get(`${API_URL}/api/projects`);
         setProjects(res.data);
         const cats = new Set(res.data.map(p => p.category).filter(Boolean));
         setCategories(['All', ...Array.from(cats)]);
@@ -47,7 +48,7 @@ export default function ProjectsSection() {
         {filteredProjects.map(project => (
           <div key={project._id} className="glass rounded-2xl overflow-hidden flex flex-col transition hover:-translate-y-1 hover:shadow-xl">
             {project.image ? (
-              <img src={`https://da-portfolio-backend.onrender.com${project.image}`} alt={project.title} className="w-full h-48 object-cover" />
+              <img src={`${API_URL}${project.image}`} alt={project.title} className="w-full h-48 object-cover" />
             ) : (
               <div className="w-full h-48 bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
                 No Image

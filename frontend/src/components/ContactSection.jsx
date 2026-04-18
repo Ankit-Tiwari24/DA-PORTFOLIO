@@ -19,7 +19,9 @@ export default function ContactSection() {
         data.append('file', formData.file);
       }
 
-      await axios.post('https://da-portfolio-backend.onrender.com/api/contact', data, {
+      const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://da-portfolio-backend.onrender.com' : 'http://localhost:5000');
+      
+      await axios.post(`${API_URL}/api/contact`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus('success');
