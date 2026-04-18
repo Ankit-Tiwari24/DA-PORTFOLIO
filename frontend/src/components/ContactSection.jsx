@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import API_URL from '../config';
 import { Paperclip, X } from 'lucide-react';
 
 export default function ContactSection() {
@@ -19,17 +20,17 @@ export default function ContactSection() {
         data.append('file', formData.file);
       }
 
-      const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://da-portfolio-backend.onrender.com' : 'http://localhost:5000');
+      console.log("Sending request to:", `${API_URL}/api/contact`);
       
-      await axios.post(`${API_URL}/api/contact`, data, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const response = await axios.post(`${API_URL}/api/contact`, data);
+      
+      console.log("Response:", response);
       setStatus('success');
       toast.success('Thank you for contacting me!');
       setFormData({ name: '', email: '', message: '', file: null });
       setTimeout(() => setStatus(''), 3000);
     } catch (error) {
-      console.error(error);
+      console.error("Frontend error:", error);
       setStatus('error');
       toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
     }

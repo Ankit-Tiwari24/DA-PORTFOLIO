@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import API_URL from '../config';
 import { Send, Paperclip, X, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -27,11 +27,11 @@ export default function Contact() {
         data.append('file', formData.file);
       }
 
-      await axios.post(`${API_URL}/api/contact`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      console.log("Sending request to:", `${API_URL}/api/contact`);
+      
+      const response = await axios.post(`${API_URL}/api/contact`, data);
+      
+      console.log("Response:", response);
       
       setStatus('success');
       toast.success('Thank you for contacting me!');
@@ -39,7 +39,7 @@ export default function Contact() {
       if(fileInputRef.current) fileInputRef.current.value = '';
       setTimeout(() => setStatus(''), 5000);
     } catch (error) {
-      console.error(error);
+      console.error("Frontend error:", error);
       setStatus('error');
       toast.error(error.response?.data?.message || 'Failed to send message. Please try again.');
       setTimeout(() => setStatus(''), 5000);

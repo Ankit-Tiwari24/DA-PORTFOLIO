@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import API_URL from '../config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
 import { ExternalLink, X, Star, TrendingUp, Users, AlertTriangle } from 'lucide-react';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import API_URL from '../config';
 import { Upload, Trash2, Mail, Edit } from 'lucide-react';
 
 export default function Admin() {
@@ -72,16 +72,14 @@ export default function Admin() {
       if (editId) {
         await axios.put(`${API_URL}/api/projects/${editId}`, formData, {
           headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data' 
+            Authorization: `Bearer ${token}`
           }
         });
         alert('Project updated!');
       } else {
         await axios.post(`${API_URL}/api/projects`, formData, {
           headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data' 
+            Authorization: `Bearer ${token}`
           }
         });
         alert('Project added!');

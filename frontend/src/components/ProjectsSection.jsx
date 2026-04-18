@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+import API_URL from '../config';
 import { ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 
