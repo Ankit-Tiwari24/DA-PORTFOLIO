@@ -86,15 +86,15 @@ router.post('/', (req, res, next) => {
 
         try {
             await transporter.sendMail(mailOptions);
-            res.status(201).json({ success: true, message: 'Message sent successfully!' });
-        } catch (mailError) {
-            console.error("Nodemailer failed to dispatch message:", mailError.message, mailError.stack);
+            return res.status(200).json({ success: true });
+        } catch (error) {
+            console.error("Nodemailer error:", error);
             return res.status(500).json({ success: false, message: 'Unable to send message. Please try again later.' });
         }
         
     } catch (error) {
-        console.error("Critical server failure handling contact routing:", error.message, error.stack);
-        res.status(500).json({ success: false, message: 'Server error' });
+        console.error("Critical server failure handling contact routing:", error);
+        return res.status(500).json({ success: false });
     }
 });
 

@@ -1,9 +1,12 @@
 require('dotenv').config();
+
+console.log("EMAIL_USER:", process.env.EMAIL_USER);
+console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "Loaded" : "Missing");
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-
 const projectRoutes = require('./routes/projects');
 const messageRoutes = require('./routes/messages');
 const authRoutes = require('./routes/auth');
@@ -25,7 +28,7 @@ app.use('/api/contact', contactRoutes);
 // MongoDB Connection
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 5000 });
         console.log("Connected to MongoDB");
     } catch (err) {
         console.warn("Local MongoDB connection failed. Falling back to in-memory database...");
